@@ -8,32 +8,37 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
  * @author Jorge Luis Boeira Bavaresco
- * jorge.bavaresco@passofundo.ifsul.edu.br
+ * @email jorge.bavaresco@passofundo.ifsul.edu.br
  */
 @Entity
-@Table(name = "grupo")
-public class Grupo implements Serializable {
+@Table(name = "cidade")
+public class Cidade implements Serializable {
     @Id
-    @Column(name = "id")
-    @SequenceGenerator(name = "seq_id_grupo", sequenceName = "gen_grupo_id",
-            allocationSize = 1)
-    @GeneratedValue(generator = "seq_id_grupo",strategy = GenerationType.SEQUENCE)    
+    @SequenceGenerator(name = "seq_cidade", sequenceName = "seq_cidade_id", allocationSize = 1)
+    @GeneratedValue(generator = "seq_cidade", strategy = GenerationType.SEQUENCE)
     private Integer id;
     @NotBlank(message = "O nome deve ser informado")
-    @Length(max = 50, message = "O nome não deve ultrapassar {max} caracteres")    
-    @Column(name = "nome",length = 50, nullable = false, unique = true)     
+    @Length(max = 50, message = "O nome não deve ter mais que {max} caracteres")
+    @Column(name = "nome", length = 50, nullable = false)
     private String nome;
-
-    public Grupo() {
+    @NotNull(message = "O estado deve ser informado")
+    @ManyToOne
+    @JoinColumn(name = "estado", referencedColumnName = "id", nullable = false)
+    private Estado estado;
+    
+    public Cidade(){
+        
     }
 
     public Integer getId() {
@@ -52,22 +57,33 @@ public class Grupo implements Serializable {
         this.nome = nome;
     }
 
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 89 * hash + Objects.hashCode(this.id);
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
     @Override
     public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
         if (obj == null) {
             return false;
         }
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Grupo other = (Grupo) obj;
+        final Cidade other = (Cidade) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
@@ -80,6 +96,4 @@ public class Grupo implements Serializable {
     }
     
     
-    
-
 }

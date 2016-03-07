@@ -12,30 +12,31 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
  * @author Jorge Luis Boeira Bavaresco
- * jorge.bavaresco@passofundo.ifsul.edu.br
+ * @email jorge.bavaresco@passofundo.ifsul.edu.br
  */
 @Entity
-@Table(name = "grupo")
-public class Grupo implements Serializable {
+@Table(name = "estado")
+public class Estado implements Serializable{
     @Id
-    @Column(name = "id")
-    @SequenceGenerator(name = "seq_id_grupo", sequenceName = "gen_grupo_id",
-            allocationSize = 1)
-    @GeneratedValue(generator = "seq_id_grupo",strategy = GenerationType.SEQUENCE)    
+    @SequenceGenerator(name = "seq_estado", sequenceName = "seq_estado_id", allocationSize = 1)
+    @GeneratedValue(generator = "seq_estado", strategy = GenerationType.SEQUENCE)
     private Integer id;
     @NotBlank(message = "O nome deve ser informado")
-    @Length(max = 50, message = "O nome não deve ultrapassar {max} caracteres")    
-    @Column(name = "nome",length = 50, nullable = false, unique = true)     
+    @Length(max = 50, message = "O nome não deve ultrapassar {max} caracteres")
+    @Column(name = "nome", nullable = false, length = 50)
     private String nome;
-
-    public Grupo() {
+    @NotBlank(message = "A UF deve ser informada")
+    @Length(min = 2, max = 2, message = "A UF deve ter {max} caracteres")
+    @Column(name = "uf", nullable = false, length = 2)
+    private String uf;
+    
+    public Estado(){
+       
     }
-
     public Integer getId() {
         return id;
     }
@@ -52,22 +53,33 @@ public class Grupo implements Serializable {
         this.nome = nome;
     }
 
+    public String getUf() {
+        return uf;
+    }
+
+    public void setUf(String uf) {
+        this.uf = uf;
+    }
+
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 89 * hash + Objects.hashCode(this.id);
+        hash = 97 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
     @Override
     public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
         if (obj == null) {
             return false;
         }
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Grupo other = (Grupo) obj;
+        final Estado other = (Estado) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
@@ -76,10 +88,8 @@ public class Grupo implements Serializable {
 
     @Override
     public String toString() {
-        return nome;
+        return nome ;
     }
     
     
-    
-
 }

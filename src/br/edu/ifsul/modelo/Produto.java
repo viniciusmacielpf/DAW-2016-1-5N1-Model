@@ -12,6 +12,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  *
@@ -25,17 +29,24 @@ public class Produto implements Serializable {
     @SequenceGenerator(name = "seq_produto", sequenceName = "seq_produto_id", allocationSize = 1)
     @GeneratedValue(generator = "seq_produto", strategy = GenerationType.SEQUENCE)
     private Integer id;
+    @NotBlank(message = "O nome deve ser informado")
+    @Length(max = 50, message = "O nome não deve ultrapassar {max} caracteres")    
     @Column(name = "nome", length = 50, nullable = false)
     private String nome;
     @Column(name = "descricao", columnDefinition = "text")
     private String descricao;
+    @NotNull(message = "O preço deve ser informado")
     @Column(name = "preco", nullable = false, columnDefinition = "decimal(12,2)")
     private Double preco;
+    @NotNull(message = "O estoque deve ser informado")
+    @Min(value = 0, message = "O estoque não pode ser menor que {value}")
     @Column(name = "estoque", nullable = false, columnDefinition = "decimal(12,2)")
     private Double estoque;
+    @NotNull(message = "O grupo deve ser informado")
     @ManyToOne
     @JoinColumn(name = "grupo", referencedColumnName = "id", nullable = false)
     private Grupo grupo;
+    @NotNull(message = "A marca deve ser informada")
     @ManyToOne
     @JoinColumn(name = "marca", referencedColumnName = "id", nullable = false)
     private Marca marca;
